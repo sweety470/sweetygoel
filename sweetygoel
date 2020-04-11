@@ -1,0 +1,84 @@
+Ques :-(10.1)Develop a GUI using tkinter for Registration form and perform its connectivity with the MySQL database. Write code to save the data entered in different widgets in database.
+Solution:- 
+ import tkinter as tk
+from tkinter import ttk
+import tkinter.messagebox
+import mysql.connector
+root=tk.Tk()
+root.title("registration form")
+root.geometry('500x500')
+
+def database():
+    name=name_var.get()
+    dob=dob_var.get()
+    email=email_var.get()
+    gender=gender_var.get()
+    address=add_var.get()
+    course=course_var.get()
+    mydb=mysql.connector.connect(host='localhost',user='system',passwd='system',database="db1")
+    db=mydb.cursor()
+    db.execute("CREATE TABLE IF NOT EXISTS Student (name varchar(10),dob varchar(10),email varchar(10),Gender varchar(10),address varchar(10),course varchar(10))")
+    db.execute('INSERT INTO Student (name,dob,email,gender,add,course)VALUES(?,?,?,?,?,?)',(name,dob,email,gender,address,course))
+    mydb.commit()
+
+
+name=tk.Label(root,text="Enter your name",width=20,font=("bold",10),fg="brown")
+name.grid(row=0,column=0)
+name_var=tk.StringVar()
+name=tk.Entry(root,width=25,textvariable=name_var)
+name.grid(row=0,column=1)
+name.focus()
+
+dob=tk.Label(root,text="Enter your dob",width=20,font=("bold",10),fg="blue")
+dob.grid(row=1,column=0)
+dob_var=tk.StringVar()
+dob=tk.Entry(root,width=25,textvariable=dob_var)
+dob.grid(row=1,column=1)
+
+email=tk.Label(root,text="Enter your email",width=20,font=("bold",10),fg="brown")
+email.grid(row=2,column=0)
+email_var=tk.StringVar()
+email=tk.Entry(root,width=25,textvariable=email_var)
+email.grid(row=2,column=1)
+
+gender=tk.Label(root,text="Select your gender",width=20,font=("bold",10),fg="grey")
+gender.grid(row=3,column=0)
+gender_var=tk.StringVar()
+gender=tk.Radiobutton(root,text="Male",value="Male",variable="gender_var")
+gender.grid(row=3,column=1)
+gender1=tk.Radiobutton(root,text="Female",value="Female",variable="gender_var")
+gender1.grid(row=3,column=2)
+gender2=tk.Radiobutton(root,text="Transgender",value="Transgender",variable="gender_var")
+gender2.grid(row=3,column=3)
+
+add=tk.Label(root,text="Enter your address",width=20,font=("bold",10),fg="brown")
+add.grid(row=4,column=0)
+add_var=tk.StringVar()
+add=tk.Entry(root,width=25,textvariable=add_var)
+add.grid(row=4,column=1)
+
+course=tk.Label(root,text="Select your course",width=20,font=("bold",10),fg="orange")
+course.grid(row=5,column=0)
+course_var=tk.StringVar()
+course=ttk.Combobox(root,width=20,textvariable=course_var)
+course['values']=('MCA','MBA','MSC','BCA','BBA','BSC')
+course.current(0)
+course.grid(row=5,column=1)
+
+submit=ttk.Button(root,text="Submit")
+submit.grid(row=6,column=0)
+tkinter.messagebox.showinfo("Message Title","Your registration form submit successfully")
+
+root.mainloop()
+
+
+Ques :-(10.2)  Write code to display all record through registration form in the database?
+Ans:  
+import mysql.connector
+mydb=mysql.connector.connect(host='localhost',user='system',passwd='system',database="student")
+db=mydb.cursor()
+db.execute("select * from sdata")
+print("The Data Inserted By The Registration Form Is:--")
+a=db.fetchall()
+for i in a:
+    print(i)
